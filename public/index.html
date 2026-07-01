@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShieldAuth | Advanced Secure Login System</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Animated Background Elements -->
+  <div class="bg-gradient-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ==================== AUTH VIEW (LOGIN / SIGNUP) ==================== -->
+    <main id="auth-view" class="view active">
+      <div class="glass-card auth-card">
+        <div class="auth-header">
+          <div class="logo">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <span>ShieldAuth</span>
+          </div>
+          <p id="auth-subtitle">Welcome back! Access your secure account.</p>
+        </div>
+
+        <!-- Auth Navigation Tabs -->
+        <div class="auth-tabs">
+          <button id="tab-login" class="tab-btn active">Sign In</button>
+          <button id="tab-signup" class="tab-btn">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form active-form">
+          <div class="input-group">
+            <label for="login-username"><i class="fa-solid fa-user"></i> Username</label>
+            <input type="text" id="login-username" placeholder="Enter your username" required autocomplete="username">
+          </div>
+          
+          <div class="input-group">
+            <label for="login-password"><i class="fa-solid fa-lock"></i> Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="login-password" placeholder="Enter your password" required autocomplete="current-password">
+              <button type="button" class="toggle-password" id="btn-toggle-login-pass">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a href="#forgot-password" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Sign In</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          </button>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signup-form" class="auth-form">
+          <div class="input-group">
+            <label for="signup-username"><i class="fa-solid fa-user"></i> Username</label>
+            <input type="text" id="signup-username" placeholder="3-20 characters, alphanumeric" required autocomplete="username">
+          </div>
+
+          <div class="input-group">
+            <label for="signup-email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+            <input type="email" id="signup-email" placeholder="name@domain.com" required autocomplete="email">
+          </div>
+
+          <div class="input-group">
+            <label for="signup-password"><i class="fa-solid fa-lock"></i> Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="signup-password" placeholder="Choose a strong password" required autocomplete="new-password">
+              <button type="button" class="toggle-password" id="btn-toggle-signup-pass">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+            
+            <!-- Password Strength Bar -->
+            <div class="strength-meter">
+              <div id="signup-strength-bar" class="strength-bar"></div>
+            </div>
+            <span id="signup-strength-text" class="strength-text">Password Strength: None</span>
+            <ul class="password-requirements">
+              <li id="req-signup-length" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 8 characters</li>
+              <li id="req-signup-upper" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 uppercase letter</li>
+              <li id="req-signup-lower" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 lowercase letter</li>
+              <li id="req-signup-number" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 number</li>
+              <li id="req-signup-special" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 special character</li>
+            </ul>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Register Securely</span> <i class="fa-solid fa-user-plus"></i>
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- ==================== MFA VERIFY VIEW ==================== -->
+    <main id="mfa-verify-view" class="view">
+      <div class="glass-card auth-card">
+        <div class="auth-header">
+          <div class="logo">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <span>ShieldAuth</span>
+          </div>
+          <h2>Multi-Factor Auth</h2>
+          <p>Please enter the 6-digit verification code from your authenticator app.</p>
+        </div>
+
+        <form id="mfa-form">
+          <div class="input-group">
+            <label for="mfa-code"><i class="fa-solid fa-key"></i> Authenticator Code</label>
+            <input type="text" id="mfa-code" placeholder="123456" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Verify & Authenticate</span> <i class="fa-solid fa-shield-check"></i>
+          </button>
+
+          <div class="mfa-toggle-recovery">
+            <button type="button" class="btn-text" id="btn-mfa-use-recovery">
+              Lost your device? Use a backup recovery code
+            </button>
+          </div>
+        </form>
+
+        <!-- Recovery Code Form (Hidden by default) -->
+        <form id="mfa-recovery-form" class="hidden">
+          <div class="input-group">
+            <label for="mfa-recovery-code"><i class="fa-solid fa-ticket"></i> Backup Recovery Code</label>
+            <input type="text" id="mfa-recovery-code" placeholder="XXXX-XXXX" required>
+          </div>
+
+          <button type="submit" class="btn btn-secondary btn-block">
+            <span>Verify Recovery Code</span> <i class="fa-solid fa-shield-check"></i>
+          </button>
+
+          <div class="mfa-toggle-recovery">
+            <button type="button" class="btn-text" id="btn-mfa-use-otp">
+              Back to Authenticator code
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- ==================== FORGOT PASSWORD VIEW ==================== -->
+    <main id="forgot-password-view" class="view">
+      <div class="glass-card auth-card">
+        <div class="auth-header">
+          <div class="logo">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <span>ShieldAuth</span>
+          </div>
+          <h2>Reset Password</h2>
+          <p>Provide your email address and we will generate a recovery token.</p>
+        </div>
+
+        <form id="forgot-form">
+          <div class="input-group">
+            <label for="forgot-email"><i class="fa-solid fa-envelope"></i> Registered Email</label>
+            <input type="email" id="forgot-email" placeholder="name@domain.com" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Send Reset Token</span> <i class="fa-solid fa-paper-plane"></i>
+          </button>
+
+          <div class="form-back-auth">
+            <a href="#auth" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+          </div>
+        </form>
+
+        <!-- Sandbox Simulation Message (Only shown on success) -->
+        <div id="simulation-message" class="simulation-box hidden">
+          <h4><i class="fa-solid fa-circle-info"></i> Security Sandbox Info</h4>
+          <p>In production, a secure reset link would be emailed. For this assessment, click the link below to perform the reset directly:</p>
+          <a id="demo-reset-url" href="#" class="demo-link">Reset Link</a>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==================== RESET PASSWORD VIEW ==================== -->
+    <main id="reset-password-view" class="view">
+      <div class="glass-card auth-card">
+        <div class="auth-header">
+          <div class="logo">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <span>ShieldAuth</span>
+          </div>
+          <h2>Create New Password</h2>
+          <p>Please enter your secure new password details below.</p>
+        </div>
+
+        <form id="reset-form">
+          <input type="hidden" id="reset-token">
+          
+          <div class="input-group">
+            <label for="reset-password"><i class="fa-solid fa-lock"></i> New Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="reset-password" placeholder="Enter new strong password" required>
+              <button type="button" class="toggle-password" id="btn-toggle-reset-pass">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+            
+            <!-- Password Strength Bar -->
+            <div class="strength-meter">
+              <div id="reset-strength-bar" class="strength-bar"></div>
+            </div>
+            <span id="reset-strength-text" class="strength-text">Password Strength: None</span>
+            <ul class="password-requirements">
+              <li id="req-reset-length" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 8 characters</li>
+              <li id="req-reset-upper" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 uppercase letter</li>
+              <li id="req-reset-lower" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 lowercase letter</li>
+              <li id="req-reset-number" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 number</li>
+              <li id="req-reset-special" class="invalid"><i class="fa-solid fa-circle-xmark"></i> At least 1 special character</li>
+            </ul>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Reset Password</span> <i class="fa-solid fa-key"></i>
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- ==================== DASHBOARD VIEW ==================== -->
+    <main id="dashboard-view" class="view">
+      <div class="dashboard-layout">
+        <!-- Dashboard Sidebar / Profile Header -->
+        <header class="dashboard-header glass-card">
+          <div class="brand">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <span>ShieldAuth</span>
+            <span class="badge badge-success">Secure Session</span>
+          </div>
+          
+          <div class="user-profile">
+            <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
+            <div class="user-details">
+              <h3 id="dash-username">Username</h3>
+              <p id="dash-email">email@domain.com</p>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <button class="btn btn-outline" id="btn-logout">
+              <i class="fa-solid fa-power-off"></i> <span>Sign Out</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="dashboard-grid">
+          <!-- Left Column - 2FA Security Control -->
+          <section class="dashboard-card glass-card 2fa-control-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-fingerprint"></i> Multi-Factor Authentication</h3>
+              <div id="mfa-status-badge" class="badge">Checking...</div>
+            </div>
+            
+            <div class="card-body">
+              <p class="section-desc">Protect your account with an additional layer of security by requiring a verification code from an authenticator app (Google Authenticator, Authy, Microsoft Authenticator) whenever you sign in.</p>
+              
+              <!-- 2FA Config Area -->
+              <div id="mfa-config-area">
+                <!-- Toggle Button -->
+                <button id="btn-toggle-mfa" class="btn btn-primary">
+                  <i class="fa-solid fa-toggle-on"></i> Configure 2FA
+                </button>
+              </div>
+
+              <!-- 2FA Setup Flow (Hidden by default) -->
+              <div id="mfa-setup-flow" class="mfa-setup-box hidden">
+                <div class="setup-steps">
+                  <div class="step">
+                    <h5>Step 1: Scan this QR Code</h5>
+                    <p>Open your authenticator app and scan the QR code below, or manually enter the secret key.</p>
+                    <div class="qr-container">
+                      <img id="mfa-qr-code" src="" alt="2FA QR Code">
+                    </div>
+                    <div class="secret-display">
+                      <span>Secret: </span><code id="mfa-secret-key">XXXX-XXXX</code>
+                    </div>
+                  </div>
+
+                  <div class="step">
+                    <h5>Step 2: Save Backup Recovery Codes</h5>
+                    <p class="warning-alert">
+                      <i class="fa-solid fa-triangle-exclamation"></i> 
+                      Store these recovery codes securely. Each code can be used <strong>once</strong> to log in if you lose your authentication device.
+                    </p>
+                    <div class="recovery-codes-grid" id="mfa-recovery-codes">
+                      <!-- Render codes -->
+                    </div>
+                  </div>
+
+                  <div class="step">
+                    <h5>Step 3: Confirm Setup</h5>
+                    <p>Enter the 6-digit verification code from your authenticator app to enable MFA.</p>
+                    <div class="setup-verify-group">
+                      <input type="text" id="mfa-setup-code" placeholder="123456" maxlength="6" inputmode="numeric">
+                      <button class="btn btn-primary" id="btn-mfa-confirm-setup">Enable 2FA</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2FA Disable Form (Hidden by default) -->
+              <div id="mfa-disable-flow" class="mfa-setup-box hidden">
+                <h5>Disable Multi-Factor Authentication</h5>
+                <p>For your security, please confirm your password to disable 2FA.</p>
+                <div class="input-group">
+                  <label for="mfa-disable-password">Confirm Password</label>
+                  <input type="password" id="mfa-disable-password" placeholder="Enter password to confirm">
+                </div>
+                <div class="setup-verify-group">
+                  <button class="btn btn-danger" id="btn-mfa-confirm-disable">Disable 2FA</button>
+                  <button class="btn btn-text" id="btn-mfa-cancel-setup">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Right Column - Active Sessions -->
+          <section class="dashboard-card glass-card active-sessions-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-laptop-code"></i> Active Login Sessions</h3>
+              <button class="btn btn-outline btn-xs" id="btn-revoke-others">Revoke Others</button>
+            </div>
+            
+            <div class="card-body">
+              <p class="section-desc font-xs">Below is a list of active login sessions authorized to access your account. You can log out of any session from other devices below.</p>
+              <div class="sessions-list" id="sessions-container">
+                <!-- Sessions rendered here -->
+              </div>
+            </div>
+          </section>
+
+          <!-- Audit Log Section (Full Width Bottom) -->
+          <section class="dashboard-card glass-card audit-logs-card full-width">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-list-check"></i> Security Audit Logs</h3>
+              <button class="btn btn-outline btn-xs" id="btn-refresh-logs"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+            </div>
+            
+            <div class="card-body">
+              <p class="section-desc">A transparent record of security-related events for your account, containing actions, timestamps, and locations (IP addresses).</p>
+              <div class="table-responsive">
+                <table class="audit-table">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>IP Address</th>
+                      <th>Device & Browser</th>
+                      <th>Details</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody id="logs-container">
+                    <!-- Logs rendered here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Client-side Logic Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+node_modules/
+secure_auth.db
+.env
+totp_temp.js
+*.log

@@ -1,0 +1,22 @@
+{
+  "name": "secure-login-system",
+  "version": "1.0.0",
+  "description": "An advanced, perfect-grade secure login system featuring password hashing, 2FA, rate limiting, and session logs.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "qrcode": "^1.5.3",
+    "speakeasy": "^2.0.0",
+    "sqlite3": "^5.1.7"
+  }
+}
